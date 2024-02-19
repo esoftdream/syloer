@@ -1,0 +1,19 @@
+{
+    "name": "esoftdream/syloer",
+    "description": "Plugin SyLoEr",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Toto",
+            "email": "totoprayogo1916@gmail.com"
+        }
+    ],
+    "require": {
+        "codeigniter4/framework": "^4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Esoftdream\\Syloer\\": "src/"
+        }
+    }
+}
