@@ -63,11 +63,9 @@ class Logger extends LogLogger
 
         // send Telegram
         // make sure to add constants : TM_SENDER_TOKEN & TM_BUGS_CENTER
-        $url      = 'https://api.telegram.org/bot' . TM_SENDER_TOKEN . '/sendMessage?chat_id=' . TM_BUGS_CENTER;
-        $hostname = (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] !== '') ? $_SERVER['HTTP_HOST'] : gethostname();
-
-        $content  = [
-            'text'       => strtoupper($level) . ' in ' . ENVIRONMENT . " mode\nat " . $hostname . "\n```log\n" . $message . "\n```",
+        $url     = 'https://api.telegram.org/bot' . TM_SENDER_TOKEN . '/sendMessage?chat_id=' . TM_BUGS_CENTER;
+        $content = [
+            'text'       => strtoupper($level) . ' in ' . ENVIRONMENT . " mode\nat " . getDomainName() . "\n```log\n" . $message . "\n```",
             'parse_mode' => 'markdown',
         ];
 
