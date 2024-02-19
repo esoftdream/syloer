@@ -60,12 +60,12 @@ class Logger extends LogLogger
             }
         }
 
-        $url = "https://api.telegram.org/bot" . TM_SENDER_TOKEN . "/sendMessage?chat_id=" . TM_BUGS_CENTER;
-        $hostname = (isset($_SERVER["HTTP_HOST"]) && $_SERVER["HTTP_HOST"] != '') ? $_SERVER["HTTP_HOST"] : gethostname();
-        $content = array(
-            'text' => $hostname . " " . ENVIRONMENT . "\n" . $message,
-            'parse_mode' => 'HTML'
-        );
+        $url      = 'https://api.telegram.org/bot' . TM_SENDER_TOKEN . '/sendMessage?chat_id=' . TM_BUGS_CENTER;
+        $hostname = (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] !== '') ? $_SERVER['HTTP_HOST'] : gethostname();
+        $content  = [
+            'text'       => $hostname . ' ' . ENVIRONMENT . "\n" . $message,
+            'parse_mode' => 'HTML',
+        ];
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -77,8 +77,6 @@ class Logger extends LogLogger
         curl_exec($ch);
         curl_close($ch);
 
-
         return true;
     }
-
 }
