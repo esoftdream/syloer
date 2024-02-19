@@ -4,6 +4,7 @@ namespace Esoftdream\Syloer\Libraries;
 
 use CodeIgniter\Log\Exceptions\LogException;
 use CodeIgniter\Log\Logger as LogLogger;
+use Config\Services;
 
 class Logger extends LogLogger
 {
@@ -60,22 +61,21 @@ class Logger extends LogLogger
             }
         }
 
+        // send Telegram
+        // make sure to add constants : TM_SENDER_TOKEN & TM_BUGS_CENTER
         $url      = 'https://api.telegram.org/bot' . TM_SENDER_TOKEN . '/sendMessage?chat_id=' . TM_BUGS_CENTER;
         $hostname = (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] !== '') ? $_SERVER['HTTP_HOST'] : gethostname();
+
         $content  = [
-            'text'       => $hostname . ' ' . ENVIRONMENT . "\n" . $message,
-            'parse_mode' => 'HTML',
+            'text'       => strtoupper($level) . ' in ' . ENVIRONMENT . " mode\nat " . $hostname . "\n```log\n" . $message . "\n```",
+            'parse_mode' => 'markdown',
         ];
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_HEADER, false);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $content);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_exec($ch);
-        curl_close($ch);
+        $client = Services::curlrequest();
+
+        $client->request('POST', $url, [
+            'form_params' => $content,
+        ]);
 
         return true;
     }
