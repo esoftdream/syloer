@@ -11,13 +11,16 @@ function getDomainName($url = null)
 {
     // If URL is not provided, use the current domain
     if (! $url) {
-        $host = URL_STAGING ?? 'localhost';
+        $host = 'localhost';
 
         if (! empty($_SERVER['HTTP_HOST'])) {
             $host = $_SERVER['HTTP_HOST'];
         }
 
-        return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https://' : 'http://') . $host . dirname($_SERVER['SCRIPT_NAME']);
+        $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https://' : 'http://';
+        $port     = isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] !== '8080' ? ':' . $_SERVER['SERVER_PORT'] : '';
+
+        return str_replace('\\', '/', $protocol . $host . $port);
     }
 
     // Parse the URL to handle various formats
