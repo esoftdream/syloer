@@ -18,9 +18,8 @@ function getDomainName($url = null)
         }
 
         $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https://' : 'http://';
-        $port     = isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] !== '8080' ? ':' . $_SERVER['SERVER_PORT'] : '';
 
-        return str_replace('\\', '/', $protocol . $host . $port);
+        return str_replace('\\', '/', $protocol . $host);
     }
 
     // Parse the URL to handle various formats
