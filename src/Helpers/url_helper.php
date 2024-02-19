@@ -11,7 +11,13 @@ function getDomainName($url = null)
 {
     // If URL is not provided, use the current domain
     if (! $url) {
-        $url = $_SERVER['HTTP_HOST'];
+        $host = URL_STAGING ?? 'localhost';
+
+        if (! empty($_SERVER['HTTP_HOST'])) {
+            $host = $_SERVER['HTTP_HOST'];
+        }
+
+        return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https://' : 'http://') . $host . dirname($_SERVER['SCRIPT_NAME']);
     }
 
     // Parse the URL to handle various formats
@@ -20,6 +26,7 @@ function getDomainName($url = null)
     // If the host component is not set, the URL is invalid
     if (! isset($urlComponents['host'])) {
         log_message('warning', 'URL is invalid');
+
         return null;
     }
 
