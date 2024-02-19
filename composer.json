@@ -15,5 +15,10 @@
         "psr-4": {
             "Esoftdream\\Syloer\\": "src/"
         }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
     }
 }
