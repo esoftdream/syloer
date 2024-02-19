@@ -2,6 +2,7 @@
 
 namespace Esoftdream\Syloer\Config;
 
+use Config\Logger as ConfigLogger;
 use Config\Services as BaseService;
 use Esoftdream\Syloer\Libraries\Logger;
 
@@ -13,6 +14,6 @@ class Services extends BaseService
             return static::getSharedInstance('logger');
         }
 
-        return new Logger(config('App'));
+        return new Logger(config(ConfigLogger::class));
     }
 }
