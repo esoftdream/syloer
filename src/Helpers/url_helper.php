@@ -1,15 +1,16 @@
 <?php
 
 /**
- * Retrieve the domain name from a given URL or the current request's domain.
+ * Mengambil nama domain dari URL yang diberikan atau domain permintaan saat ini.
  *
- * @param string|null $url The URL to extract the domain from. If not provided, the current request's domain will be used.
+ * @param string|null $url              URL untuk mengekstrak nama domain. Jika tidak diberikan, domain permintaan saat ini akan digunakan.
+ * @param bool        $only_main_domain Jika diatur sebagai true, hanya nama domain utama yang akan dikembalikan, tanpa subdomain.
  *
- * @return string|null The domain name extracted from the URL, or null if the URL is invalid.
+ * @return string|null Nama domain yang diekstrak dari URL, atau null jika URL tidak valid.
  */
-function getDomainName($url = null)
+function getDomainName($url = null, bool $only_main_domain = false)
 {
-    // If URL is not provided, use the current domain
+    // Jika URL tidak diberikan, gunakan domain saat ini
     if (! $url) {
         $host = 'localhost';
 
@@ -17,33 +18,33 @@ function getDomainName($url = null)
             $host = $_SERVER['HTTP_HOST'];
         }
 
-        $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https://' : 'http://';
+        $urlParsed = parse_url($host);
 
-        return str_replace('\\', '/', $protocol . $host);
+        return $urlParsed['host'];
     }
 
-    // Parse the URL to handle various formats
-    $urlComponents = parse_url($url);
+    // Parse URL untuk menangani berbagai format
+    $urlParsed = parse_url($url);
 
-    // If the host component is not set, the URL is invalid
-    if (! isset($urlComponents['host'])) {
-        log_message('warning', 'URL is invalid');
+    // Jika komponen host tidak diatur, URL tidak valid
+    if (! isset($urlParsed['host'])) {
+        log_message('warning', 'URL tidak valid');
 
         return null;
     }
 
-    // Extract the host from the URL components
-    $host = $urlComponents['host'];
+    if ($only_main_domain) {
+        $domain = $urlParsed['host'] ?? '';
 
-    // Remove subdomains if necessary (optional)
-    if (strpos($host, '.') !== false) {
-        // Split the host by dot and extract the last part (top-level domain)
-        $hostParts = explode('.', $host);
-        $domain    = end($hostParts);
-    } else {
-        // If no subdomains, the domain is the same as the host
-        $domain = $host;
+        // Mencocokkan domain yang mengandung 2 kata contoh co.id, co.uk, dll
+        if (preg_match('/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i', $domain, $regs)) {
+            return $regs['domain'];
+        }
+
+        log_message('info', 'Domain utama tidak ditemukan');
+
+        return null;
     }
 
-    return $domain;
+    return $urlParsed['host'];
 }
