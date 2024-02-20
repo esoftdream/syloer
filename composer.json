@@ -11,6 +11,8 @@
     "require": {
         "codeigniter4/framework": "^4"
     },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "Esoftdream\\Syloer\\": "src/"

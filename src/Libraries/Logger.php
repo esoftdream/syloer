@@ -61,6 +61,13 @@ class Logger extends LogLogger
             }
         }
 
+        $this->sendTelegram($level, $message);
+
+        return true;
+    }
+
+    function sendTelegram($level, $message)
+    {
         // send Telegram
         // make sure to add constants : TM_SENDER_TOKEN & TM_BUGS_CENTER
         $url     = 'https://api.telegram.org/bot' . TM_SENDER_TOKEN . '/sendMessage?chat_id=' . TM_BUGS_CENTER;
@@ -73,8 +80,8 @@ class Logger extends LogLogger
 
         $client->request('POST', $url, [
             'form_params' => $content,
+            'http_errors' => false
         ]);
 
-        return true;
     }
 }
