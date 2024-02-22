@@ -3,6 +3,7 @@
 namespace Esoftdream\Syloer\Libraries;
 
 use CodeIgniter\Log\Exceptions\LogException;
+use CodeIgniter\Log\Handlers\HandlerInterface;
 use CodeIgniter\Log\Logger as LogLogger;
 use Config\Services;
 
@@ -61,27 +62,34 @@ class Logger extends LogLogger
             }
         }
 
+        // call sendTelegram()
         $this->sendTelegram($level, $message);
 
         return true;
     }
 
-    function sendTelegram($level, $message)
+    /**
+     * Fungsi Kirim log ke Telegram
+     *
+     * @param string $level
+     * @param string $message
+     */
+    protected function sendTelegram($level, $message)
     {
-        // send Telegram
         // make sure to add constants : TM_SENDER_TOKEN & TM_BUGS_CENTER
-        $url     = 'https://api.telegram.org/bot' . TM_SENDER_TOKEN . '/sendMessage?chat_id=' . TM_BUGS_CENTER;
-        $content = [
-            'text'       => strtoupper($level) . ' in ' . ENVIRONMENT . " mode\nat " . getDomainName() . "\n```log\n" . $message . "\n```",
-            'parse_mode' => 'markdown',
-        ];
+        if (defined('TM_SENDER_TOKEN') && defined('TM_BUGS_CENTER') && TM_BUGS_CENTER !== '' && TM_SENDER_TOKEN !== '') {
+            $url     = 'https://api.telegram.org/bot' . TM_SENDER_TOKEN . '/sendMessage?chat_id=' . TM_BUGS_CENTER;
+            $content = [
+                'text'       => strtoupper($level) . ' in ' . ENVIRONMENT . " mode\nat " . getDomainName() . "\n```log\n" . $message . "\n```",
+                'parse_mode' => 'markdown',
+            ];
 
-        $client = Services::curlrequest();
+            $client = Services::curlrequest();
 
-        $client->request('POST', $url, [
-            'form_params' => $content,
-            'http_errors' => false
-        ]);
-
+            $client->request('POST', $url, [
+                'form_params' => $content,
+                'http_errors' => false,
+            ]);
+        }
     }
 }
