@@ -2,10 +2,15 @@
     "name": "esoftdream/syloer",
     "description": "Plugin SyLoEr",
     "type": "library",
+    "license": "proprietary",
     "authors": [
         {
             "name": "Toto",
             "email": "totoprayogo1916@gmail.com"
+        },
+        {
+            "name": "Nanang Wicaksana",
+            "email": "nathoenk@gmail.com"
         }
     ],
     "require": {
