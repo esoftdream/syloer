@@ -12,7 +12,7 @@ function getDomainName($url = null, bool $only_main_domain = false)
 {
     // Jika URL tidak diberikan, gunakan domain saat ini
     if (! $url) {
-        $host = 'localhost';
+        $host = gethostname();
 
         if (! empty($_SERVER['HTTP_HOST'])) {
             $host = $_SERVER['HTTP_HOST'];
