@@ -20,7 +20,11 @@ function getDomainName($url = null, bool $only_main_domain = false)
 
         $urlParsed = parse_url($host);
 
-        return $urlParsed['path'];
+        if (isset($urlParsed['path'])) {
+            return $urlParsed['path'];
+        } else {
+            return $urlParsed['host'];
+        }
     }
 
     // Parse URL untuk menangani berbagai format
