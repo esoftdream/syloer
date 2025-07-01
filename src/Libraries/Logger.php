@@ -5,6 +5,7 @@ namespace Esoftdream\Syloer\Libraries;
 use CodeIgniter\Log\Exceptions\LogException;
 use CodeIgniter\Log\Handlers\HandlerInterface;
 use CodeIgniter\Log\Logger as LogLogger;
+use Stringable;
 
 class Logger extends LogLogger
 {
@@ -30,7 +31,7 @@ class Logger extends LogLogger
      * @param string $level
      * @param string $message
      */
-    public function log($level, $message, array $context = []): bool
+    public function log($level, string|Stringable $message, array $context = []): void
     {
         if (is_numeric($level)) {
             $level = array_search((int) $level, $this->logLevels, true);
@@ -43,7 +44,7 @@ class Logger extends LogLogger
 
         // Does the app want to log this right now?
         if (! in_array($level, $this->loggableLevels, true)) {
-            return false;
+            return;
         }
 
         // Parse our placeholders
@@ -80,7 +81,5 @@ class Logger extends LogLogger
         // kirim notif ke Telegram
         $telegram = new Telegram($this->bugsCenter, $this->senderToken, $this->threadId);
         $telegram->send(strtoupper($level) . ' in ' . ENVIRONMENT . " mode\nat " . getDomainName() . "\n```log\n" . $message . "\n```");
-
-        return true;
     }
 }
