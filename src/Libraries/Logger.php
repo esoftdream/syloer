@@ -78,6 +78,11 @@ class Logger extends LogLogger
             }
         }
 
+        // skip syloer jika di pesan terdapat kalimat 'disallowed characters'
+        if (is_string($message) && str_contains($message, 'disallowed characters')) {
+            return true;
+        }
+
         // kirim notif ke Telegram
         $telegram = new Telegram($this->bugsCenter, $this->senderToken, $this->threadId);
         $telegram->send(strtoupper($level) . ' in ' . ENVIRONMENT . " mode\nat " . getDomainName() . "\n```log\n" . $message . "\n```");
