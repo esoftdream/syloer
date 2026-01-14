@@ -80,7 +80,7 @@ class Logger extends LogLogger
 
         // skip syloer jika di pesan terdapat kalimat 'disallowed characters'
         if (is_string($message) && str_contains($message, 'disallowed characters')) {
-            return true;
+            return;
         }
 
         // kirim notif ke Telegram
